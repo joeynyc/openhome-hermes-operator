@@ -74,7 +74,7 @@ Model check:
 
 ```bash
 curl -s http://127.0.0.1:8642/v1/models \
-  -H 'Authorization: Bearer dev-token'
+  -H "Authorization: Bearer $API_SERVER_KEY"
 ```
 
 ## 4. Test bridge against live Hermes
@@ -122,13 +122,33 @@ Keep Hermes API Server private on localhost. Only expose the small bridge to LAN
 ## 6. Package ability zip
 
 ```bash
-cd /home/zerocool/projects/openhome-hermes-operator/openhome_ability
-zip -r /tmp/hermes-operator-openhome-ability.zip hermes-operator
+cd /home/zerocool/projects/openhome-hermes-operator
+./scripts/package_ability.sh
 ```
 
 Upload that zip to the OpenHome dashboard when the device/account is available.
 
-## 7. Remaining hardware-only checks
+## 7. Final pre-device validation
+
+Run this before considering the repo ready for the physical OpenHome device:
+
+```bash
+cd /home/zerocool/projects/openhome-hermes-operator
+source .venv/bin/activate
+pip install -e '.[dev]'
+python -m pytest tests -v
+python -m build
+./scripts/package_ability.sh
+```
+
+Expected local state:
+
+- tests pass
+- `dist/` contains the Python package build outputs
+- `/tmp/hermes-operator-openhome-ability.zip` contains `hermes-operator/main.py` and `hermes-operator/README.md`
+- `git status --short` is clean after committed docs/code changes
+
+## 8. Remaining hardware-only checks
 
 These need the actual DevKit:
 
