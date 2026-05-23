@@ -1,41 +1,26 @@
 # OpenHome Hermes Operator
 
-OpenHome voice control for Hermes Agent.
+[![CI](https://github.com/joeynyc/openhome-hermes-operator/actions/workflows/ci.yml/badge.svg)](https://github.com/joeynyc/openhome-hermes-operator/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-This turns an OpenHome DevKit into a local-first voice operator for real home-lab work: checking model servers, reading logs, running benchmarks, managing services, triggering Hermes skills, and speaking back short status summaries.
+Local-first voice operations for Hermes Agent through OpenHome.
 
-OpenHome is the microphone and speaker. Hermes is the agent brain.
+OpenHome is the mic and speaker. Hermes is the agent brain. Together they become a voice operator for home-lab work: check model servers, read logs, run benchmarks, manage services, trigger skills, and speak back short status summaries.
+
+```text
+"Jetson, check my local model server and tell me if anything crashed."
+```
 
 ## Status
 
-Ready until the physical OpenHome device is available.
-
-Already built and tested:
-
-- FastAPI bridge
-- OpenHome custom ability folder
-- fake mode for local demos
-- optional bearer-token auth
-- Hermes OpenAI-compatible API client
-- voice-safe response cleanup
-- local CLI simulator
-- ability zip packaging
-- pytest + GitHub Actions CI
-
-Still needs the device/dashboard:
-
-- upload the custom ability zip
-- configure trigger phrases
-- set the bridge URL/token
-- test the real voice loop
+Pre-device build is ready. The bridge, tests, fake mode, CLI simulator, and OpenHome ability package are complete. Remaining work requires the physical OpenHome device/dashboard.
 
 ## Architecture
 
 ```text
-OpenHome Ability -> local FastAPI bridge -> Hermes API Server -> tools/models/actions -> spoken summary
+OpenHome Ability -> FastAPI bridge -> Hermes API Server -> tools/models/actions -> spoken summary
 ```
-
-The OpenHome ability stays small. It captures a voice task, confirms it, sends it to the bridge, speaks `spoken_summary`, then resumes normal OpenHome flow.
 
 ## Quick start
 
@@ -52,17 +37,15 @@ python -m pytest tests -v
 
 Fake mode works without an OpenHome device and without a live Hermes server.
 
-Terminal 1:
-
 ```bash
+# terminal 1
 source .venv/bin/activate
 export HERMES_OPERATOR_TOKEN=dev-token
 ./scripts/run_bridge_fake.sh
 ```
 
-Terminal 2:
-
 ```bash
+# terminal 2
 export HERMES_OPERATOR_TOKEN=dev-token
 ./scripts/demo_curl.sh "check my local model server"
 python -m hermes_operator.cli "check my local model server"
@@ -105,7 +88,7 @@ Output:
 /tmp/hermes-operator-openhome-ability.zip
 ```
 
-Upload that zip in the OpenHome dashboard when the device/account is ready.
+Upload the zip in the OpenHome dashboard when the device/account is ready.
 
 Suggested device config:
 
@@ -122,19 +105,15 @@ POST /run
 Authorization: Bearer <token>   # only required if HERMES_OPERATOR_TOKEN is set
 ```
 
-Request:
-
 ```json
 {"task":"check my local model server","session_id":"optional"}
 ```
-
-Response:
 
 ```json
 {"ok":true,"spoken_summary":"short voice-safe answer","raw_text":"full Hermes response","artifact_path":null}
 ```
 
-## Validate before hardware
+## Ship checklist
 
 ```bash
 source .venv/bin/activate
@@ -144,11 +123,13 @@ python -m build
 ./scripts/package_ability.sh
 ```
 
-If those pass, the next step requires the physical OpenHome device.
-
 ## Docs
 
-- `docs/architecture.md`
-- `docs/pre-device-wiring.md`
-- `docs/openhome-application.md`
-- `openhome_ability/hermes-operator/README.md`
+- Architecture: `docs/architecture.md`
+- Pre-device runbook: `docs/pre-device-wiring.md`
+- OpenHome application pitch: `docs/openhome-application.md`
+- Ability README: `openhome_ability/hermes-operator/README.md`
+
+## License
+
+MIT. See `LICENSE`.
