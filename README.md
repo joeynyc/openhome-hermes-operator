@@ -41,11 +41,30 @@ pip install -e '.[dev]'
 uvicorn hermes_operator.app:app --reload --host 0.0.0.0 --port 8787
 ```
 
+Run bridge in fake mode:
+
+```bash
+HERMES_OPERATOR_FAKE_MODE=true uvicorn hermes_operator.app:app --reload --host 0.0.0.0 --port 8787
+```
+
+Run bridge with token auth:
+
+```bash
+HERMES_OPERATOR_TOKEN=change-me uvicorn hermes_operator.app:app --reload --host 0.0.0.0 --port 8787
+```
+
 Smoke test:
+
+```bash
+./scripts/demo_curl.sh "Say hello in one short sentence"
+```
+
+Manual curl:
 
 ```bash
 curl -X POST http://127.0.0.1:8787/run \
   -H 'content-type: application/json' \
+  -H 'Authorization: Bearer change-me' \
   -d '{"task":"Say hello in one short sentence"}'
 ```
 
