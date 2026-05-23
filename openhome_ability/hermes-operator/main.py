@@ -17,7 +17,7 @@ from src.agent.capability_worker import CapabilityWorker
 from src.main import AgentWorker
 
 BRIDGE_URL = os.getenv("OPENHOME_HERMES_BRIDGE_URL", "http://127.0.0.1:8787/run")
-BRIDGE_TOKEN = os.getenv("OPENHOME_HERMES_BRIDGE_TOKEN", "")
+BRIDGE_TOKEN = os.getenv("OPENHOME_HERMES_BRIDGE_TOKEN", os.getenv("HERMES_OPERATOR_TOKEN", ""))
 REQUEST_TIMEOUT_SECONDS = int(os.getenv("OPENHOME_HERMES_TIMEOUT", "240"))
 EXIT_WORDS = {"stop", "cancel", "exit", "quit", "never mind", "nothing"}
 

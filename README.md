@@ -57,6 +57,7 @@ Smoke test:
 
 ```bash
 ./scripts/demo_curl.sh "Say hello in one short sentence"
+python3 -m hermes_operator.cli "Say hello in one short sentence"
 ```
 
 Manual curl:
